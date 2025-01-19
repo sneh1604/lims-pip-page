@@ -20,27 +20,31 @@ export default function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
+  
     // Send email with EmailJS
-    emailjs.send(
-      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-      formData,
-      process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
-    )
-    .then((response) => {
-      console.log('SUCCESS!', response.status, response.text)
-      setFormData({ name: '', email: '', message: '' }) // Reset form after submission
-    }, (err) => {
-      console.log('FAILED...', err)
-      alert('Failed to send email. Please try again later.')
-      }),
-    {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message
-    }
+    emailjs
+      .send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
+      )
+      .then(
+        (response) => {
+          console.log('SUCCESS!', response.status, response.text)
+          setFormData({ name: '', email: '', message: '' }) // Reset form after submission
+        },
+        (err) => {
+          console.log('FAILED...', err)
+          alert('Failed to send email. Please try again later.')
+        }
+      )
   }
+  
 
   return (
     <section id="contact" className="py-12 md:py-20">
